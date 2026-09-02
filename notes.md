@@ -8,7 +8,7 @@
 
 ## 2. Identified Data Quirks & Anomalies
 * **Trailing Whitespace (Target Dataset):** The `Institution` column in `fte-enrollments-target.csv` contains trailing spaces across 6 institution names (`Capilano University `, `Kwantlen Polytechnic University `, `Nicola Valley Institute of Technology `, `Thompson Rivers University `, `University of the Fraser Valley `, and `Vancouver Island University `).
-* **Abbreviated Institution Names (Headcount Dataset):** `student-headcount-by-region.csv` uses short codes (e.g., `BCIT`, `UBC`, `VCC`) instead of full canonical names.
+* **Abbreviated Institution Names (Headcount Dataset):** `student-headcount-by-region.csv` uses short codes (e.g., `BCIT`, `UBC`, `VCC`) instead of full canonical names and also some contain * or null.
 * **String Formatting in Numeric Fields:** 
   * `Operating Grant` in `operating-grants.csv` contains currency symbols and commas (e.g., `"$112,235,228"`), requiring string cleaning before conversion.
   * `FTE Actual` and `FTE Target` contain formatted numeric strings with commas (e.g., `"13,279"`).
@@ -20,6 +20,6 @@
 ## 3. Cleaning Action Items
 1. Drop all empty `Unnamed:` columns from FTE actual and target DataFrames.
 2. Apply `.str.strip()` to `Institution` string values across all raw DataFrames to eliminate trailing/leading whitespace.
-3. Translate institution short codes in `student-headcount-by-region.csv` to canonical names using `institution-mapping-base.csv` (or explicit dictionary lookup).
+3. Translate institution short codes in `student-headcount-by-region.csv` to canonical names using `institution-mapping-base.csv` (or explicit dictionary lookup) and remove null and * headcounts.
 4. Remove `$` and `,` characters from numeric columns (`Operating Grant`, `FTE Actual`, `FTE Target`, `Headcount`) and cast to integer types (`float64`).
 5. Standardize temporal dimensions across datasets by renaming `Academic Year` in `student-headcount-by-region.csv` to `Fiscal Year`, applying `.str.strip()` to eliminate whitespace, and filtering on the 9 overlapping years (`FY 2016/17` to `FY 2024/25`) during the pipeline merge step.

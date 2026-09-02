@@ -106,6 +106,13 @@ def clean_student_headcount() -> pd.DataFrame:
     # 2. Map canonical institution names
     df["Institution"] = df["Institution"].replace(INSTITUTION_MAP)
 
+    # 3. Convert Headcount to numeric (coercing '*' and missing values to NaN)
+    df["Headcount"] = pd.to_numeric(df["Headcount"], errors="coerce")
+
+    # 4. Drop suppressed/missing records so processed CSV only contains valid integers
+    df = df.dropna(subset=["Headcount"])
+    df["Headcount"] = df["Headcount"].astype(int)
+
     return df
 
 
