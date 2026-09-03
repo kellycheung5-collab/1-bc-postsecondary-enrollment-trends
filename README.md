@@ -6,7 +6,7 @@ An end-to-end SQL and Python analytics project evaluating international and dome
 
 ## Problem Statement
 
-Public post-secondary institutions in British Columbia have experienced significant demographic shifts and policy adjustments over the past decade. Understanding how international student enrollment has evolved relative to domestic enrollment—and how provincial operating grants per Full-Time Equivalent (FTE) are distributed across regional colleges, institutes, and research universities—is critical for institutional resource allocation and policy analysis.
+Public post-secondary institutions in British Columbia have experienced significant demographic shifts and policy adjustments over the past decade. Understanding how international student enrollment has evolved relative to domestic enrollment and how provincial operating grants per Full-Time Equivalent (FTE) are distributed across regional colleges, institutes, and research universities which is critical for institutional resource allocation and policy analysis.
 
 This project addresses four core analytical questions:
 1. **Enrollment Composition**: How has the proportion of international versus domestic student headcount shifted across public institutions over time?
@@ -27,7 +27,7 @@ This project utilizes open datasets provided by the Government of British Columb
 
 > **Data Baseline & Scope Notice**
 > * **Baseline Date**: All source datasets reflect official public records retrieved and verified as available on **September 2, 2026**.
-> * **Institutional Scope**: Covers all **21 public post-secondary institutions** in British Columbia (private career colleges and non-funded entities excluded).
+> * **Institutional Scope**: Covers all **26 public post-secondary institutions** in British Columbia (private career colleges and non-funded entities excluded).
 > * **Local Setup**: Raw CSV source files (`data/raw/`) and the local SQLite database (`data/processed/enrollment.db`) are excluded via `.gitignore`. Download the datasets above to initialize locally.
 
 ---
@@ -77,7 +77,7 @@ The recent contraction in international student enrollment was highly concentrat
 ![Net International Headcount Change](data/processed/08_intl_headcount_net_change_by_inst.png)
 
 ### 3. Funding Parity: Provincial Grant Allocation per Actual FTE
-Provincial operating grant funding per actual FTE varies substantially across institutional designations. Northern and specialized institutions—such as Coast Mountain College ($51,938/FTE in 2024/25), Northern Lights College ($34,508/FTE), and UNBC ($30,549/FTE)—receive significantly higher operating grant allocations per FTE compared to high-density metro universities like Kwantlen ($14,586/FTE) or Langara ($11,758/FTE), reflecting geographical delivery overheads and facility scale.
+Provincial operating grant funding per actual FTE varies substantially across institutional designations. Northern and specialized institutions such as Coast Mountain College ($51,938/FTE in 2024/25), Northern Lights College ($34,508/FTE), and UNBC ($30,549/FTE) receive significantly higher operating grant allocations per FTE compared to high-density metro universities like Kwantlen ($14,586/FTE) or Langara ($11,758/FTE), reflecting geographical delivery overheads and facility scale.
 
 ![Operating Grant per FTE Heatmap](data/processed/04_grant_per_fte_heatmap.png)
 
