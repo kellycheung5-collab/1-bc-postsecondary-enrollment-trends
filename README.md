@@ -33,40 +33,40 @@ This project utilizes open datasets provided by the Government of British Columb
 ---
 
 ## Project Structure
-
-1-bc-postsecondary-enrollment-trends/
-├── data/
-│   ├── processed/
-│   │   ├── clean-fte-actual.csv
-│   │   ├── clean-fte-target.csv
-│   │   ├── clean-operating-grants.csv
-│   │   ├── clean-student-headcount.csv
-│   │   └── enrollment.db
-│   └── raw/
-│       ├── fte-enrollments-actual.csv
-│       ├── fte-enrollments-target.csv
-│       ├── institution_mapping.csv
-│       ├── operating-grants.csv
-│       └── student-headcount-by-region.csv
-├── notebooks/
-│   ├── 01_data_inspection.ipynb
-│   └── 05_python_analysis_viz.ipynb
-├── scripts/
-│   ├── 01_data_ingestion.py
-│   ├── 02_data_cleaning.py
-│   └── 03_db_migration.py
-├── sql/
-│   └── 04_analytical_queries.sql
-├── tests/
-│   ├── __init__.py
-│   ├── test_data_cleaning.py
-│   └── test_db_migration.py
-├── .gitignore
-├── LICENSE
-├── README.md
-├── notes.md
-└── requirements.txt
-
+```text
+1-bc-postsecondary-enrollment-trends/  
+├── data/  
+│   ├── processed/  
+│   │   ├── clean-fte-actual.csv  
+│   │   ├── clean-fte-target.csv  
+│   │   ├── clean-operating-grants.csv  
+│   │   ├── clean-student-headcount.csv  
+│   │   └── enrollment.db  
+│   └── raw/  
+│       ├── fte-enrollments-actual.csv  
+│       ├── fte-enrollments-target.csv  
+│       ├── institution_mapping.csv  
+│       ├── operating-grants.csv  
+│       └── student-headcount-by-region.csv  
+├── notebooks/  
+│   ├── 01_data_inspection.ipynb  
+│   └── 05_python_analysis_viz.ipynb  
+├── scripts/  
+│   ├── 01_data_ingestion.py  
+│   ├── 02_data_cleaning.py  
+│   └── 03_db_migration.py  
+├── sql/  
+│   └── 04_analytical_queries.sql  
+├── tests/  
+│   ├──__init__.py  
+│   ├── test_data_cleaning.py  
+│   └── test_db_migration.py  
+├── .gitignore  
+├── LICENSE  
+├── README.md  
+├── notes.md  
+└── requirements.txt  
+```
 ---
 
 ## Key SQL Techniques Demonstrated
