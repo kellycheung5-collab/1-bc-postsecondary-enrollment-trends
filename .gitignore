@@ -23,16 +23,15 @@ env/
 # Jupyter Notebooks
 .ipynb_checkpoints/
 
-# Databases
+# Data & Database Files (Excluded)
+data/raw/*
+data/processed/*
 *.db
 *.sqlite
 *.sqlite3
 
-# Data
-data/raw/*
-data/processed/*
-!data/raw/.gitkeep
-!data/processed/.gitkeep
+# Explicitly Track Visualizations & Figures in Git
+!data/processed/*.png
 
 # OS Cruft
 .DS_Store
