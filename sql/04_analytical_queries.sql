@@ -131,31 +131,27 @@ GROUP BY i.institution_name, f.fiscal_year
 ORDER BY i.institution_name, f.fiscal_year;
 
 
--- Query 6: Institutions and Regions with Steepest International Declines
+-- Query 6: Institutions  with Steepest International Declines
 -- Compares max peak international headcount against recent totals.
 WITH intl_by_inst AS (
     SELECT 
-        r.region_name,
         i.institution_name,
         f.fiscal_year,
         SUM(f.headcount) AS intl_headcount
     FROM fact_student_headcount f
     JOIN dim_institution i ON f.institution_id = i.institution_id
-    JOIN dim_region r ON f.region_id = r.region_id
     WHERE f.student_type = 'International'
-    GROUP BY r.region_name, i.institution_name, f.fiscal_year
+    GROUP BY i.institution_name, f.fiscal_year
 ),
 inst_peak_vs_recent AS (
     SELECT 
-        region_name,
         institution_name,
         MAX(intl_headcount) AS peak_intl_headcount,
         SUM(CASE WHEN fiscal_year = '2024/2025' THEN intl_headcount ELSE 0 END) AS recent_intl_headcount
     FROM intl_by_inst
-    GROUP BY region_name, institution_name
+    GROUP BY institution_name
 )
 SELECT 
-    region_name,
     institution_name,
     peak_intl_headcount,
     recent_intl_headcount,
@@ -166,3 +162,38 @@ SELECT
 FROM inst_peak_vs_recent
 WHERE peak_intl_headcount > 0
 ORDER BY pct_drop_from_peak ASC;
+
+-- Query 7: Domestic vs. International Student Headcount
+-- Compares Domestic vs. International Student Headcount for BC Postsecondary institutions.
+SELECT 
+    fiscal_year,
+    student_type,
+    SUM(headcount) AS total_headcount
+FROM fact_student_headcount
+WHERE student_type IN ('Domestic', 'International')
+GROUP BY fiscal_year, student_type
+ORDER BY fiscal_year, student_type;
+
+
+-- Query 8: Institution International Student Headcount Change from 2023/2024 to 2024/2025
+-- Examines International Student Headcount at each institution.
+WITH intl_by_inst AS (
+    SELECT 
+        i.institution_name,
+        f.fiscal_year,
+        SUM(f.headcount) AS intl_headcount
+    FROM fact_student_headcount f
+    JOIN dim_institution i ON f.institution_id = i.institution_id
+    WHERE f.student_type = 'International'
+      AND f.fiscal_year IN ('2023/2024', '2024/2025')
+    GROUP BY i.institution_name, f.fiscal_year
+)
+SELECT 
+    institution_name,
+    SUM(CASE WHEN fiscal_year = '2023/2024' THEN intl_headcount ELSE 0 END) AS hc_2023_24,
+    SUM(CASE WHEN fiscal_year = '2024/2025' THEN intl_headcount ELSE 0 END) AS hc_2024_25,
+    SUM(CASE WHEN fiscal_year = '2024/2025' THEN intl_headcount ELSE 0 END) - 
+    SUM(CASE WHEN fiscal_year = '2023/2024' THEN intl_headcount ELSE 0 END) AS net_change
+FROM intl_by_inst
+GROUP BY institution_name
+ORDER BY net_change ASC;
