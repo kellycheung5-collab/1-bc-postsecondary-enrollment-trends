@@ -18,7 +18,7 @@ This project addresses four core analytical questions:
 
 ## Data Sources & Licensing
 
-This project utilizes open datasets provided by the Government of British Columbia under the **Open Government Licence — British Columbia**:
+This project utilizes open datasets provided by the Government of British Columbia under the **Open Government Licence - British Columbia**:
 
 * **Full-Time Equivalent (FTE) Enrolments**: [FTE Enrolments at B.C. Public Post-Secondary Institutions](https://catalogue.data.gov.bc.ca/dataset/full-time-equivalent-enrolments-at-b-c-public-post-secondary-institutions)
 * **FTE Targets**: [Full-Time Equivalent Enrolment Targets](https://catalogue.data.gov.bc.ca/dataset/full-time-equivalent-enrolment-targets-at-public-post-secondary-institutions)
@@ -34,24 +34,38 @@ This project utilizes open datasets provided by the Government of British Columb
 
 ## Project Structure
 
-1-bc-postsecondary-enrollment-trends/  
-├── data/  
-│   ├── processed/                      # Cleaned datasets, enrollment.db, and exported PNG figures  
-│   └── raw/                            # Source CSV downloads from B.C. Open Data  
-├── notebooks/  
-│   ├── 01_data_inspection.ipynb        # Initial exploratory analysis and data profile inspection  
-│   └── 05_python_analysis_viz.ipynb    # Visualizations and database query integration  
-├── scripts/  
-│   ├── 02_data_cleaning.py             # Data transformation, standardization, and tidying  
-│   ├── 03_db_migration.py              # SQLite schema build and data loading  
-│   └── generate_institution_mapping.py # Cross-dataset institution name mapping generator  
-├── sql/  
-│   └── 04_analytical_queries.sql       # Analytical SQL queries (CTEs, Window Functions)  
-├── .gitignore                          # Excludes raw data, SQLite DBs, and virtual environments  
-├── LICENSE                             # MIT License  
-├── README.md                           # Project documentation  
-├── notes.md                            # Data inspection and mapping development notes  
-└── requirements.txt                    # Pinned project dependencies  
+1-bc-postsecondary-enrollment-trends/
+├── data/
+│   ├── processed/
+│   │   ├── clean-fte-actual.csv
+│   │   ├── clean-fte-target.csv
+│   │   ├── clean-operating-grants.csv
+│   │   ├── clean-student-headcount.csv
+│   │   └── enrollment.db
+│   └── raw/
+│       ├── fte-enrollments-actual.csv
+│       ├── fte-enrollments-target.csv
+│       ├── institution_mapping.csv
+│       ├── operating-grants.csv
+│       └── student-headcount-by-region.csv
+├── notebooks/
+│   ├── 01_data_inspection.ipynb
+│   └── 05_python_analysis_viz.ipynb
+├── scripts/
+│   ├── 01_data_ingestion.py
+│   ├── 02_data_cleaning.py
+│   └── 03_db_migration.py
+├── sql/
+│   └── 04_analytical_queries.sql
+├── tests/
+│   ├── __init__.py
+│   ├── test_data_cleaning.py
+│   └── test_db_migration.py
+├── .gitignore
+├── LICENSE
+├── README.md
+├── notes.md
+└── requirements.txt
 
 ---
 
@@ -97,42 +111,58 @@ Across all reported fiscal years, B.C. public post-secondary actual FTE enrolmen
 
 ## How to Run
 
-### 1. Environment Setup
+### Environment Setup
 Clone the repository and set up a virtual environment:
 
 git clone https://github.com/kellycheung5-collab/1-bc-postsecondary-enrollment-trends  
 cd 1-bc-postsecondary-enrollment-trends
 
-# Create and activate virtual environment
+### Create virtual environment
 python -m venv .venv  
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 
-# Install required packages
+### Install requirements
 pip install -r requirements.txt
 
-### 2. Download Data
-1. Download the source CSV datasets from the B.C. Data Catalogue links listed under Data Sources & Licensing.
-2. Place the uncompressed CSV files into the data/raw/ folder in your project root directory.
+### Download Data
+Download the source CSV datasets from B.C. Data Catalogue.
+Place uncompressed CSV files into data/raw/.
 
-### 3. Build Database & Run Pipeline
-Execute the data processing and database setup scripts sequentially from the project root:
+### Build Database & Run Pipeline
+Execute pipeline scripts sequentially from project root:
 
-# 1. Generate institution mapping file
-python scripts/generate_institution_mapping.py
+* **Ingest datasets & build initial mapping**: python scripts/01_data_ingestion.py
+* **Clean raw CSVs & export to data/processed/**: python scripts/02_data_cleaning.py
+* **Create star schema & migrate data to enrollment.db**: python scripts/03_db_migration.py
+* **Run Analysis & Visualizations**
+* **Launch Jupyter Notebook**: jupyter notebook notebooks/05_python_analysis_viz.ipynb
 
-# 2. Clean raw CSVs and export processed data
-python scripts/02_data_cleaning.py
+---
 
-# 3. Create SQLite schema and migrate processed data into enrollment.db
-python scripts/03_db_migration.py
+## Testing & Data Quality
 
-### 4. Run Analysis & Visualizations
-Launch Jupyter Notebook to execute the visualization and query pipeline:
+This repository uses pytest to ensure data integrity, clean transformation, and valid schema migration across all pipeline steps.
 
-jupyter notebook notebooks/05_python_analysis_viz.ipynb
+### Running Tests
+
+To execute the test suite:
+
+pytest -v
+
+### Test Suite Structure
+
+* **tests/test_data_cleaning.py**: Unit tests verifying:
+  - String, currency, and decimal numeric cleaning logic (clean_currency_and_float).
+  - Suppression filtering (dropping asterisk * values and enforcing integer types).
+  - Institution mapping replacements using monkeypatch.
+
+* **tests/test_db_migration.py**: Integration tests verifying:
+  - DDL schema execution on temporary SQLite instances (tmp_path).
+  - Surrogate key generation for dimension tables (dim_fiscal_year, dim_institution, dim_region).
+  - Fact table ETL joining and population (fact_institution_financials_fte, fact_student_headcount).
 
 ---
 
 ## License
 
-Distributed under the **MIT License**. See `LICENSE` for details. Data utilized under the **Open Government Licence — British Columbia**.
+Distributed under the MIT License. See LICENSE for details. Data utilized under the Open Government Licence - British Columbia.
