@@ -26,7 +26,7 @@ This project utilizes open datasets provided by the Government of British Columb
 * **Domestic and International Student Headcount**: [Headcount by Economic Development Region and Institution](https://open.canada.ca/data/en/dataset/ace77db4-1f4f-4db1-91bf-9cf8475d9dfc)
 
 > **Data Baseline & Scope Notice**
-> * **Baseline Date**: All source datasets reflect official public records retrieved and verified as available on **September 9, 2026**.
+> * **Baseline Date**: All source datasets reflect official public records retrieved and verified as available on **September 2, 2026**.
 > * **Institutional Scope**: Covers all **21 public post-secondary institutions** in British Columbia (private career colleges and non-funded entities excluded).
 > * **Local Setup**: Raw CSV source files (`data/raw/`) and the local SQLite database (`data/processed/enrollment.db`) are excluded via `.gitignore`. Download the datasets above to initialize locally.
 
